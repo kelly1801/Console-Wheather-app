@@ -1,0 +1,17 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "  Wheather app in the console",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Kelly Chara",
+  "type": "module",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "inquirer": "^9.1.4"
+  }
+}
