@@ -1,6 +1,6 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
-import { readInput, inquireMenu, pause } from "./utils/inquirer.js";
+import * as dotenv from "dotenv";
+dotenv.config();
+import { readInput, inquireMenu, pause, listPlaces } from "./utils/inquirer.js";
 import Searchers from "./models/searches.js";
 
 const main = async () => {
@@ -8,22 +8,25 @@ const main = async () => {
 
   do {
     opt = await inquireMenu();
-    console.log({ opt });
-const cities = new Searchers
+    const cities = new Searchers();
     switch (opt) {
       case 1:
-        const city = await readInput("City: ");
-        await cities.fetchCity( city )
-            
-        
+        const query = await readInput("City: ");
+        const results = await cities.fetchCity(query);
+        const idPlace = await listPlaces(results);
+        const selectedPlace = results.find((place) => place.id === idPlace);
+        const { lat, lng, name } = selectedPlace;
+        const weather = await cities.getWeather(lat, lng);
+        const { temp, min, max, desc } = weather;
+        console.clear()
         console.log("\nCity info\n".green);
-        console.log(` City: `);
-        console.log(` Lat:`);
-        console.log(` Lng:`);
-        console.log(` Temp:`);
-        console.log(` Min Temp:`);
-        console.log(` Max Temp:`);
-
+        console.log(` City: ${name}`);
+        console.log(` Lat: ${lat}`);
+        console.log(` Lng: ${lng}`);
+        console.log(` Temp: ${temp}`);
+        console.log(` Min Temp:${min}`);
+        console.log(` Max Temp:${max}`);
+        console.log(` How is the Weather: ${desc}`.cyan);
         break;
 
       case 2:

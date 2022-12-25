@@ -69,13 +69,12 @@ export const readInput = async (message) => {
   return desc;
 };
 
-export const listTasks = async (tasks = [], type = "list", message = "Delete") => {
+export const listPlaces = async (places = [], type = "list", message = "Choose a place") => {
   console.clear();
-  const choices = tasks.map((task, index) => {
+  const choices = places.map((place, index) => {
     return {
-      value: `${task.id}`,
-      name: `${colors.green(index + 1 + ".")} ${task.desc}`,
-      checked: task.doneAt
+      value: `${place.id}`,
+      name: `${colors.green(index + 1 + ".")} ${place.name}`,  
     };
   });
 

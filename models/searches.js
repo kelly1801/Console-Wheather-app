@@ -9,6 +9,13 @@ export default class Searchers {
       language: "en",
     };
   }
+
+  get weatherParams() {
+    return {
+      appid: process.env.OPENWEATHER_KEY,
+      units: "metric",
+    };
+  }
   constructor() {}
 
   async fetchCity(place = "") {
@@ -20,13 +27,41 @@ export default class Searchers {
 
       const { data } = await instace.get();
 
-      console.log(data.features);
-
-      return [];
+      return data.features.map((query) => ({
+        id: query.id,
+        name: query.place_name,
+        lng: query.center[0],
+        lat: query.center[1],
+      }));
     } catch (err) {
       return [];
     }
 
     return [];
+  }
+
+  async getWeather(lat, lon) {
+    try {
+      const instace = axios.create({
+        baseURL: `https://api.openweathermap.org/data/2.5/weather`,
+        params: {
+          ...this.weatherParams,
+          lat,
+          lon,
+        },
+      });
+
+      const { data } = await instace.get();
+      const { weather, main } = data;
+
+      return {
+        desc: weather[0].description,
+        min: main.temp_min,
+        max: main.temp_max,
+        temp: main.temp,
+      };
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
